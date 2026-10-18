@@ -19,8 +19,8 @@ app.get("/", (req, res) => {
   });
 });
 
-// DIPERBAIKI: Menggunakan "/*" agar kompatibel dengan path-to-regexp di Express 5
-app.get("/*", async (req, res) => {
+// Express 5 (path-to-regexp v8): wildcard harus diberi nama
+app.get("/*splat", async (req, res) => {
   try {
     const apiKey = process.env.ISAAW_KEY;
 
@@ -31,16 +31,19 @@ app.get("/*", async (req, res) => {
       });
     }
 
-    const targetUrl = new URL(
-      req.originalUrl,
-      API_BASE
-    );
+    // Gabungkan sebagai string agar "//host" tidak bisa mengganti domain
+    const targetUrl = new URL(API_BASE + req.originalUrl);
+
+    if (targetUrl.origin !== new URL(API_BASE).origin) {
+      return res.status(400).json({
+        status: false,
+        error: "Path tidak valid"
+      });
+    }
 
     const response = await fetch(targetUrl.toString(), {
       method: "GET",
-      headers: {
-        "X-API-Key": apiKey
-      },
+      headers: { "X-API-Key": apiKey },
       signal: AbortSignal.timeout(20000)
     });
 
