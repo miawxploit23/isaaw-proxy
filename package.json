@@ -1,0 +1,13 @@
+{
+  "name": "isaaw-proxy",
+  "version": "1.0.0",
+  "description": "iSaaw API Proxy",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
