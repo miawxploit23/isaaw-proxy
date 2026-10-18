@@ -19,7 +19,8 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("*", async (req, res) => {
+// DIPERBAIKI: Menggunakan "/*" agar kompatibel dengan path-to-regexp di Express 5
+app.get("/*", async (req, res) => {
   try {
     const apiKey = process.env.ISAAW_KEY;
 
